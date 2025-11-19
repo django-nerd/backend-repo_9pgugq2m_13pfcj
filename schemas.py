@@ -11,10 +11,10 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl
+from typing import Optional, List
 
-# Example schemas (replace with your own):
+# Example schemas (retain for reference):
 
 class User(BaseModel):
     """
@@ -38,11 +38,19 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
-
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+# Plant catalog schema
+class Plant(BaseModel):
+    """
+    Collection name: "plant"
+    Represents a plant in a large pot with a spiritual twist.
+    """
+    name: str = Field(..., description="Display name")
+    species: Optional[str] = Field(None, description="Botanical species")
+    pot_style: Optional[str] = Field(None, description="Design of the big pot")
+    chakra: Optional[str] = Field(None, description="Associated chakra or energy center")
+    mantra: Optional[str] = Field(None, description="Short affirmation or mantra")
+    description: Optional[str] = Field(None, description="Story or spiritual meaning")
+    price: Optional[float] = Field(None, ge=0, description="Price in dollars")
+    tags: List[str] = Field(default_factory=list, description="Searchable tags")
+    featured: bool = Field(False, description="Whether highlighted on homepage")
+    image_url: Optional[HttpUrl] = Field(None, description="Photo URL of the plant in its pot")
